@@ -2,13 +2,13 @@
 See LICENSE folder for this sample’s licensing information.
 
 Abstract:
-iOS NSViewRepresentable implementations
+iOS UIViewRepresentable implementations.
 */
 
-import Foundation
 import SwiftUI
 import UIKit
 
+/// `UIView` used to demonstrate accessibility of `UIViewRepresentable` types.
 final class RepresentableUIView: UIView {
     var color: UIColor
 
@@ -27,27 +27,33 @@ final class RepresentableUIView: UIView {
     }
 }
 
-struct RepresentableView: UIViewRepresentable {
-    func makeUIView(context: UIViewRepresentableContext<RepresentableView>) -> RepresentableUIView {
-        return RepresentableUIView(.red)
-    }
-
-    func updateUIView(_ nsView: RepresentableUIView, context: UIViewRepresentableContext<RepresentableView>) {
-    }
-}
-
+/// `UIViewController` type used to demonstrate accessibility.
 final class RepresentableUIViewController: UIViewController {
     override func loadView() {
         self.view = RepresentableUIView(.blue)
     }
 }
 
+/// `UIViewControllerRepresentable` used to demonstrate accessibility.
 struct RepresentableViewController: UIViewControllerRepresentable {
-    func makeUIViewController(context: UIViewControllerRepresentableContext<RepresentableViewController>) -> RepresentableUIViewController {
-        return RepresentableUIViewController()
+    func makeUIViewController(context: UIViewControllerRepresentableContext<RepresentableViewController>)
+        -> RepresentableUIViewController {
+        RepresentableUIViewController()
     }
 
-    func updateUIViewController(_ nsViewController: RepresentableUIViewController,
-                                context: UIViewControllerRepresentableContext<RepresentableViewController>) {
+    func updateUIViewController(
+        _ nsViewController: RepresentableUIViewController,
+        context: UIViewControllerRepresentableContext<RepresentableViewController>) {
+    }
+}
+
+/// `UIViewRepresentable` type used to demonstrate accessibility.
+struct RepresentableView: UIViewRepresentable {
+    func makeUIView(context: UIViewRepresentableContext<RepresentableView>)
+        -> RepresentableUIView {
+        RepresentableUIView(.red)
+    }
+
+    func updateUIView(_ nsView: RepresentableUIView, context: UIViewRepresentableContext<RepresentableView>) {
     }
 }

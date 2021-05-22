@@ -2,13 +2,13 @@
 See LICENSE folder for this sample’s licensing information.
 
 Abstract:
-macOS NSViewRepresentable implementations
+macOS NSViewRepresentable implementations.
 */
 
-import Foundation
 import SwiftUI
 import AppKit
 
+/// `NSView` used to demonstrate accessibility of `NSViewRepresentable` types.
 final class RepresentableNSView: NSView {
     var color: NSColor
 
@@ -38,27 +38,31 @@ final class RepresentableNSView: NSView {
     }
 }
 
-struct RepresentableView: NSViewRepresentable {
-    func makeNSView(context: NSViewRepresentableContext<RepresentableView>) -> RepresentableNSView {
-        return RepresentableNSView(.red)
-    }
-
-    func updateNSView(_ nsView: RepresentableNSView, context: NSViewRepresentableContext<RepresentableView>) {
-    }
-}
-
+/// `NSViewController` type used to demonstrate accessibility.
 final class RepresentableNSViewController: NSViewController {
     override func loadView() {
         self.view = RepresentableNSView(.blue)
     }
 }
 
-struct RepresentableViewController: NSViewControllerRepresentable {
-    func makeNSViewController(context: NSViewControllerRepresentableContext<RepresentableViewController>) -> RepresentableNSViewController {
-        return RepresentableNSViewController()
+/// `NSViewRepresentable` used to demonstrate accessibility.
+struct RepresentableView: NSViewRepresentable {
+    func makeNSView(context: NSViewRepresentableContext<RepresentableView>) -> RepresentableNSView {
+        RepresentableNSView(.red)
     }
 
-    func updateNSViewController(_ nsViewController: RepresentableNSViewController,
-                                context: NSViewControllerRepresentableContext<RepresentableViewController>) {
+    func updateNSView(_ nsView: RepresentableNSView, context: NSViewRepresentableContext<RepresentableView>) {
+    }
+}
+
+/// `NSViewControllerRepresentable` used to demonstrate accessibility.
+struct RepresentableViewController: NSViewControllerRepresentable {
+    func makeNSViewController(context: NSViewControllerRepresentableContext<RepresentableViewController>) -> RepresentableNSViewController {
+        RepresentableNSViewController()
+    }
+
+    func updateNSViewController(
+        _ nsViewController: RepresentableNSViewController,
+        context: NSViewControllerRepresentableContext<RepresentableViewController>) {
     }
 }

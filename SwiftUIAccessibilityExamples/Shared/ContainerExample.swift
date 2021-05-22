@@ -2,37 +2,36 @@
 See LICENSE folder for this sample’s licensing information.
 
 Abstract:
-Container-related accessibility examples
+Container-related accessibility examples.
 */
 
-import Foundation
 import SwiftUI
 
+/// Examples of using containers in SwiftUI accessibility.
 struct ContainerExample: View {
-    @State var onState = true
+    @State private var onState = true
 
     var body: some View {
-        VStack(alignment: .leading) {
+        LabeledExample("Grouping Container") {
             // Create a stack with multiple toggles and a label inside.
             VStack(alignment: .leading) {
-                Text("Grouping Container")
                 Toggle(isOn: $onState) { Text("Toggle 1") }
                 Toggle(isOn: $onState) { Text("Toggle 2") }
                 Toggle(isOn: $onState) { Text("Toggle 3") }
                 Toggle(isOn: $onState) { Text("Toggle 4") }
             }
             .padding()
-            .background(Color.white)
-            .border(Color.blue, width: 0.5)
+            .background { Color.white }
+            .border(.blue, width: 0.5)
+
             // Explicitly make a new accessibility element
             // which will contain the children.
             .accessibilityElement(children: .contain)
-            .accessibility(label: Text("Grouping Container"))
+            .accessibilityLabel("Grouping Container")
+        }
 
-            LargeSpacer()
-
+        LabeledExample("Hiding Container") {
             VStack(alignment: .leading) {
-                Text("Hiding Container")
                 Image("dot_red", label: Text("Red Dot"))
                     .resizable()
                     .frame(width: 48, height: 48)
@@ -41,30 +40,57 @@ struct ContainerExample: View {
                     .resizable()
                     .frame(width: 48, height: 48)
                     .scaledToFit()
+                    .opacity(onState ? 1 : 0)
+                    // Opacity hides accessibility element by default,
+                    // if this is unwanted explicitly set hidden to false
+                    .accessibilityHidden(false)
             }
             .padding()
-            .background(Color.white)
-            .border(Color.blue, width: 0.5)
+            .background { Color.white }
+            .border(.blue, width: 0.5)
             // Hide all the accessibility elements that come from controls
-            // inside this stack
-            .accessibility(hidden: true)
-            // Create a new accessibility element to contain them
+            // inside this stack.
+            .accessibilityHidden(true)
+            // Create a new accessibility element to contain them.
             .accessibilityElement(children: .contain)
-            .accessibility(label: Text("Hiding Container"))
+            // On macOS, containers with a label will be focusable by
+            // assistive technologies. On iOS, the label will be spoken
+            // when assistive technologies first focus on one of their
+            // children.
+            .accessibilityLabel("Hiding Container")
+        }
 
-            LargeSpacer()
-
+        LabeledExample("Combine, then Contain") {
             // Two text elements in a vertical stack, with different hints.
             VStack(alignment: .leading) {
-                Text("Combining").accessibility(hint: Text("First Hint"))
-                Text("Container").accessibility(hint: Text("Second Hint"))
+                Text("Combining").accessibilityHint("First Hint")
+                Text("Container").accessibilityHint("Second Hint")
             }
             .padding()
-            .background(Color.white)
-            .border(Color.blue, width: 0.5)
-            // Explicitly create a container that will combine it's children
-            // This will have a combined label and hint from the text elements
-            // below it. And the text elements will be hidden.
+            .background { Color.white }
+            .border(.blue, width: 0.5)
+            // First combine to merge properties from children into a
+            // new element.
+            .accessibilityElement(children: .combine)
+            // Now transform the newly created element into a container
+            // to expose the children.
+            .accessibilityElement(children: .contain)
+        }
+
+        LabeledExample("Contain, then Combine") {
+            // Two text elements in a vertical stack, with different hints.
+            VStack(alignment: .leading) {
+                Text("Combining").accessibilityHint("First Hint")
+                Text("Container").accessibilityHint("Second Hint")
+            }
+            .padding()
+            .background { Color.white }
+            .border(.blue, width: 0.5)
+            // Create a new accessibility element to contain them.
+            .accessibilityElement(children: .contain)
+            // Now transform the container into an element that
+            // merges properties from children, and no longer
+            // exposes its children.
             .accessibilityElement(children: .combine)
         }
     }

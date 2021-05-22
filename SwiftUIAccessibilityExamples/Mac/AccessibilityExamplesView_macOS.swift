@@ -2,47 +2,54 @@
 See LICENSE folder for this sample’s licensing information.
 
 Abstract:
-macOS accessibility examples view
+macOS accessibility examples view.
 */
 
-import Foundation
 import SwiftUI
 
-// Top-level view for all examples
-struct AccessibilityExamplesView: View {
-    @State var selection: String? = examples.first?.name
+/// The contents view for a specific example.
+private struct ExampleView: View {
+    private var example: Example
 
-    var selectedExample: AccessibilityExample? {
-        selection.flatMap { string in
-            examples.first { example in
-                example.name == string
-            }
-        }
+    init(_ example: Example) {
+        self.example = example
     }
 
-    var selectedView: AnyView {
-        selectedExample?.view ?? AnyView(Spacer())
+    @ViewBuilder
+    var innerExampleView: some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 10) {
+                example.view
+                    .padding(.all, example.wantsPadding ? 8 : 0)
+            }
+            Spacer()
+        }
     }
 
     var body: some View {
-        HSplitView {
-            List(selection: $selection) {
-                ForEach(examples, id: \.name) { example in
-                    Text(verbatim: example.name)
-                }
-                Spacer()
+        if example.wantsScrollView {
+            ScrollView {
+                innerExampleView
             }
-            .frame(width: 200, height: 500)
-
+        } else {
             VStack {
-                HStack {
-                    selectedView
-                    Spacer()
-                }
+                innerExampleView
                 Spacer()
             }
-            .padding()
         }
-        .frame(minWidth: 600)
+    }
+}
+
+/// The top-level view for all examples.
+struct ExamplesView: View {
+    var body: some View {
+        NavigationView {
+            List(examples, id: \.name) { example in
+                NavigationLink(example.name) {
+                    ExampleView(example)
+                }
+            }
+            Text("No Content")
+        }
     }
 }

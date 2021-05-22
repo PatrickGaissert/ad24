@@ -4,4 +4,4 @@ Make your app accessible to everyone by applying accessibility modifiers to your
 
 ## Overview
 
-- Note: This sample code project is associated with WWDC 2019 session [238: Accessibility in SwiftUI](https://developer.apple.com/videos/play/wwdc19/238/).
+- Note: This sample code project is associated with WWDC21 session [10119: SwiftUI Accessibility: Beyond the Basics](https://developer.apple.com/videos/play/wwdc21/10119/).

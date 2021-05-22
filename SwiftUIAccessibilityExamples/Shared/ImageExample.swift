@@ -2,14 +2,13 @@
 See LICENSE folder for this sample’s licensing information.
 
 Abstract:
-Image-related accessibility examples
+Image-related accessibility examples.
 */
 
-import Foundation
 import SwiftUI
 
-// Visual frame for an image
-struct ExampleImageView: View {
+/// A visual frame for an image.
+struct FramedImage: View {
     let image: Image
 
     init(_ image: Image) {
@@ -17,54 +16,88 @@ struct ExampleImageView: View {
     }
 
     var body: some View {
+        let dimension: CGFloat = 64
+        let backgroundShape = RoundedRectangle(cornerRadius: 5)
+
         image.resizable()
-            .frame(width: 64, height: 64)
+            .frame(width: dimension, height: dimension)
             .scaledToFit()
             .padding()
-            .background(
-                RoundedRectangle(cornerRadius: 5)
-                    .fill(Color.white)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 5)
-                            .stroke(Color.gray)
-                    )
-            )
+            .background {
+                backgroundShape.fill(.white)
+            }
+            .overlay {
+                backgroundShape.stroke(.gray)
+            }
     }
 }
 
+/// Examples of making Images accessible using SwiftUI.
 struct ImageExample: View {
     var body: some View {
-        VStack(alignment: .leading) {
-            Text("Unlabeled Image")
-
+        LabeledExample("Unlabeled Image") {
             // This image creates an accessibility element, but has no label.
-            ExampleImageView(Image("dot_green"))
+            // The accessibility label will be taken from the file name of the
+            // image.
+            FramedImage(Image("dot_green"))
+        }
 
-            LargeSpacer()
+        LabeledExample("Accessible Images") {
+            // This image uses an explicit accessibility label via the API.
+            FramedImage(Image("dot_red"))
+                .accessibilityLabel("Red Dot Image")
 
-            Text("Labeled Images")
+            // This image is created with an explicit (accessibility) label.
+            FramedImage(Image("dot_green", label: Text("Green Dot")))
 
-            HStack {
-                // This image uses an explicit accessibility label via the API.
-                ExampleImageView(Image("dot_red"))
-                    .accessibility(label: Text("Red Dot Image"))
+            // This image gets an implicit accessibility label, because
+            // the string `dot_yellow` is in a localizable strings
+            // file.
+            FramedImage(Image("dot_yellow"))
 
-                // This image is created with an explicit accessibility label.
-                ExampleImageView(Image("dot_green", label: Text("Green Dot")))
+            // Use the `accessibilityChildren` modifier to allow VoiceOver users
+            // to navigate into an image and access parts of the contents
+            // individually as accessibility elements.
+            FramedImage(Image("dot_yellow"))
+                .accessibilityChildren {
+                    VStack {
+                        Text("First Child Element")
+                        Text("Second Child Element")
+                        Text("Third Child Element")
+                    }
+                }
+        }
 
-                // This image gets an implicit accessibility label, because
-                // the string string "dot_yellow" is in a localizable strings
-                // file.
-                ExampleImageView(Image("dot_yellow"))
-            }
+        LabeledExample("System Images") {
+            // System images have an accessibility label by default.
+            FramedImage(Image(systemName: "trash"))
 
-            LargeSpacer()
+            // But you may need to provide a more appropriate label.
+            FramedImage(Image(systemName: "trash"))
+                .accessibilityLabel("Delete")
+        }
 
-            Text("Decorative Image")
-            
+        LabeledExample("Decorative Image") {
             // This image is explicitly marked decorative, so it does not
             // create an accessibility element.
-            ExampleImageView(Image(decorative: "dot_green"))
+            FramedImage(Image(decorative: "dot_green"))
+        }
+
+        LabeledExample("Text and Image Pairs") {
+            // Label will automatically create only one accessibility element
+            // for the entire view. The Accessibility information for
+            // this element will be taken from the text, but its size will
+            // encompass the image.
+            Label("Delete", systemImage: "trash")
+
+            // Any accessibility information explicitly applied to the image
+            // in a label will be ignored.
+            Label() {
+                Text("Turn On")
+            } icon: {
+                Image("dot_green")
+                    .accessibilityLabel("This accessibility label will be ignored")
+            }
         }
     }
 }

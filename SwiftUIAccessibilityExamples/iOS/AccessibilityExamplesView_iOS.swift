@@ -2,42 +2,53 @@
 See LICENSE folder for this sample’s licensing information.
 
 Abstract:
-iOS accessibility examples view
+iOS accessibility examples view.
 */
 
-import Foundation
 import SwiftUI
 
-// Contents view for a specific example
-struct ExampleView: View {
-    let example: AccessibilityExample
+/// The contents view for a specific example.
+private struct ExampleView: View {
+    private var example: Example
 
-    init(_ example: AccessibilityExample) {
+    init(_ example: Example) {
         self.example = example
     }
 
-    var body: some View {
-        VStack {
+    var innerExampleView: some View {
+        VStack(alignment: .leading, spacing: 10) {
             example.view
-                .padding(.horizontal)
-            
-            Spacer()
+                .padding(.all, example.wantsPadding ? 8 : 0)
+                .navigationBarTitle(example.name)
+        }
+    }
+
+    var body: some View {
+        if example.wantsScrollView {
+            ScrollView {
+                innerExampleView
+            }
+        } else {
+            VStack {
+                innerExampleView
+                Spacer()
+            }
         }
     }
 }
 
-// Top-level view for all examples
-struct AccessibilityExamplesView: View {
+/// The top-level view for all examples.
+struct ExamplesView: View {
     var body: some View {
         NavigationView {
-            List {
-                ForEach(examples, id: \.name) { example in
-                    NavigationLink(destination: ExampleView(example)) {
-                        Text(verbatim: example.name)
-                    }
+            List(examples, id: \.name) { example in
+                NavigationLink(example.name) {
+                    ExampleView(example)
                 }
             }
-            .navigationBarTitle(Text("Examples"))
+            .navigationBarTitle(
+                Text("Examples").accessibilityLabel("AX Examples")
+            )
         }
     }
 }
