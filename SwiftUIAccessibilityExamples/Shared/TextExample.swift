@@ -37,11 +37,23 @@ struct TextExample: View {
             Text("This text will spell out characters")
                 .speechSpellsOutCharacters()
 
+            Text(AttributedString("This text will never spell out characters") {
+                $0.accessibilitySpeechSpellsOutCharacters = false
+            })
+
             Text("The text will be spoken at a high pitch")
-                .speechAdjustedPitch(2)
+                .speechAdjustedPitch(1)
+
+            Text(AttributedString("The text will be spoken at a low pitch") {
+                $0.accessibilitySpeechAdjustedPitch = -1
+            })
 
             Text("This text will, always, completely spell out punctuation!")
                 .speechAlwaysIncludesPunctuation()
+
+            Text(AttributedString("This text will never spell out punctuation!") {
+                $0.accessibilitySpeechIncludesPunctuation = false
+            })
 
             Text("This text will be spoken behind existing speech in VoiceOver")
                 .speechAnnouncementsQueued(true)
@@ -50,8 +62,12 @@ struct TextExample: View {
         LabeledExample("Customizing Pronunciation") {
             // Use speechPhoneticRepresentation` to specify pronunciation
             // of the text by VoiceOver in IPA notation.
-            Text("Record").speechPhoneticRepresentation("ɹɪˈkɔɹd")
-            Text("Record").speechPhoneticRepresentation("ˈɹɛkɚd")
+            Text(AttributedString("Record") {
+                $0.accessibilitySpeechPhoneticNotation = "ɹɪˈkɔɹd"
+            })
+            Text(AttributedString("Record") {
+                $0.accessibilitySpeechPhoneticNotation = "ˈɹɛkɚd"
+            })
         }
 
         // Use accessibilityTextContentType to specify what kind of content your
@@ -62,6 +78,10 @@ struct TextExample: View {
 
             Text("This text will be treated as if it was in a Word Processing document.")
                 .accessibilityTextContentType(.wordProcessing)
+
+            Text(AttributedString("This text will be treated as if it was in a narrative") {
+                $0.accessibilityTextualContext = .narrative
+            })
         }
 
         // Use the accessibilityHeading modifier or the isHeader trait to mark
@@ -83,6 +103,24 @@ struct TextExample: View {
             Text("This will be a third standard heading")
                 .bold()
                 .accessibilityAddTraits(.isHeader)
+
+            Text(AttributedString("This will be a level-one heading") {
+                $0.accessibilityHeadingLevel = .h1
+            })
         }
+
+        LabeledExample("Custom") {
+            Text(AttributedString("This has custom attributes, spoken by VoiceOver") {
+                $0.accessibilityTextCustom = ["Custom description"]
+            })
+        }
+    }
+}
+
+extension AttributedString {
+    init(_ string: String, configuration: (inout AttributedString) -> Void) {
+        var attrString = AttributedString(string)
+        configuration(&attrString)
+        self = attrString
     }
 }
