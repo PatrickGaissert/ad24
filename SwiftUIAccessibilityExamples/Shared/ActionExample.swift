@@ -10,16 +10,10 @@ import SwiftUI
 /// Examples of using actions in SwiftUI accessibility.
 struct ActionExample: View {
     var body: some View {
-        // Use `accessibilityAction` to add a default action to an element,
-        // or to override an existing default action the element might already
-        // have. Add `isButton` to have VoiceOver read this element as a button.
         LabeledExample("Element with default action") {
             AccessibilityElementView(color: .red, text: Text("Default"))
                 .accessibilityLabel("Element with default action")
-                .accessibilityAddTraits(.isButton)
-                .accessibilityAction {
-                    print("Default action fired!")
-                }
+                #warning("TODO: Accessibility")
         }
 
         LabeledExample("Element with custom actions") {

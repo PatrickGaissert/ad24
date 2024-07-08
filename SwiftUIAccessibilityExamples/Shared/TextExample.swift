@@ -20,7 +20,7 @@ struct TextExample: View {
                 Text("This will be a single Accessibility element.")
                 Text("Because of the `.combine` modifier.")
             }
-            .accessibilityElement(children: .combine)
+            #warning("TODO: Accessibility")
 
             Text("This Text will have both an Label and Value for Accessibility")
                 // Prefer `accessibilityLabel` for aspects of accessibility
@@ -84,29 +84,10 @@ struct TextExample: View {
             })
         }
 
-        // Use the accessibilityHeading modifier or the isHeader trait to mark
-        // headings in your text. You can use up to six levels of headings
-        // which can be navigated separately.
         LabeledExample("Headings") {
             Text("This will be a standard heading")
                 .bold()
-                .accessibilityHeading(.unspecified)
-            Text("This will be a level-one heading")
-                .italic()
-                .accessibilityHeading(.h1)
-            Text("This will be a level-two heading")
-                .underline()
-                .accessibilityHeading(.h2)
-            Text("This will be another a standard heading")
-                .bold()
-                .accessibilityHeading(.unspecified)
-            Text("This will be a third standard heading")
-                .bold()
-                .accessibilityAddTraits(.isHeader)
-
-            Text(AttributedString("This will be a level-one heading") {
-                $0.accessibilityHeadingLevel = .h1
-            })
+                #warning("TODO: Accessibility")
         }
 
         LabeledExample("Custom") {

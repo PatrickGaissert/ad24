@@ -33,11 +33,7 @@ struct CustomControlsExample: View {
                 .onTapGesture {
                     // ...
                 }
-                .accessibilityRepresentation {
-                    Button("Delete") {
-                        // Same action as tap gesture.
-                    }
-                }
+                #warning("TODO: Accessibility")
         }
 
         LabeledExample("Custom Stepper") {
@@ -61,11 +57,7 @@ struct CustomControlsExample: View {
             .frame(minWidth: 150)
             .background { shape.fill(.white) }
             .overlay { shape.stroke(.gray) }
-            .accessibilityRepresentation {
-                Stepper(value: $stepperValue, in: 0...100) {
-                    Text("Custom Stepper")
-                }
-            }
+            #warning("TODO: Accessibility")
         }
 
         LabeledExample("Custom Picker") {
@@ -79,13 +71,7 @@ struct CustomControlsExample: View {
                 Button("Option 3") { pickerValue = 2 }
             }
             .buttonStyle(.plain)
-            .accessibilityRepresentation {
-                Picker(selection: $pickerValue, label: Text("Custom Picker") ) {
-                    Text("Option 1").tag(0)
-                    Text("Option 2").tag(1)
-                    Text("Option 3").tag(2)
-                }
-            }
+            #warning("TODO: Accessibility")
         }
     }
 }
@@ -98,11 +84,7 @@ private struct TrackSlider: View {
 
     var body: some View {
         TrackShape(value: value)
-            .accessibilityRepresentation {
-                Slider(value: $value, in: 0...1) {
-                    Text(label)
-                }
-            }
+            #warning("TODO: Accessibility")
     }
 }
 
@@ -114,11 +96,7 @@ private struct TrackSwitch: View {
 
     var body: some View {
         TrackShape(value: isOn ? 1 : 0)
-            .accessibilityRepresentation {
-                Toggle(isOn: $isOn) {
-                    Text(label)
-                }
-            }
+            #warning("TODO: Accessibility")
     }
 }
 

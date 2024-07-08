@@ -43,9 +43,8 @@ struct ImageExample: View {
         }
 
         LabeledExample("Accessible Images") {
-            // This image uses an explicit accessibility label via the API.
             FramedImage(Image("dot_red"))
-                .accessibilityLabel("Red Dot Image")
+                #warning("TODO: Accessibility")
 
             // This image is created with an explicit (accessibility) label.
             FramedImage(Image("dot_green", label: Text("Green Dot")))
@@ -78,9 +77,8 @@ struct ImageExample: View {
         }
 
         LabeledExample("Decorative Image") {
-            // This image is explicitly marked decorative, so it does not
-            // create an accessibility element.
-            FramedImage(Image(decorative: "dot_green"))
+            #warning("TODO: Accessibility")
+            FramedImage(Image("dot_green"))
         }
 
         LabeledExample("Text and Image Pairs") {

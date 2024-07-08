@@ -66,21 +66,7 @@ private struct LinesOfCodeGraph: View {
             // an accessibility element visible to VoiceOver.
             .accessibilityLabel("Lines of Code Bar Graph")
 
-            // Use `accessibilityChildren` to create accessibility elements
-            // within the canvas, so that VoiceOver users can navigate inside
-            // it and read the information for every week.
-            // These accessibility elements aren't drawn on the
-            // screen. Instead, they're just a representation of the
-            // canvas for users of assistive technologies.
-            .accessibilityChildren {
-                HStack {
-                    ForEach(lines.indices, id: \.self) { index in
-                        Rectangle()
-                            .accessibilityLabel("Week \(index + 1)")
-                            .accessibilityValue("\(lines[index]) lines")
-                    }
-                }
-            }
+            #warning("TODO: Accessibility")
         }
         .padding()
         .background {
